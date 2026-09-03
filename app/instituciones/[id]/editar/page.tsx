@@ -16,7 +16,7 @@ export default async function PaginaEditarInstitucion({
   const supabase = await crearClienteServidor();
   const { data: institucion } = await supabase
     .from('instituciones')
-    .select('id, nombre, email_contacto, notas')
+    .select('id, nombre, email_contacto, notas, activo')
     .eq('id', id)
     .single();
 
@@ -72,6 +72,11 @@ export default async function PaginaEditarInstitucion({
             className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
           />
         </div>
+
+        <label className="flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" name="activo" defaultChecked={institucion.activo} />
+          Institución activa
+        </label>
 
         <button
           type="submit"

@@ -1,6 +1,9 @@
 import Link from 'next/link';
-import { crearClienteAdmin } from '@/lib/supabase/server';
-import { cambiarActivoUsuario } from './actions';
+import { crearClienteAdmin, crearClienteServidor } from '@/lib/supabase/server';
+import { eliminarUsuario } from './actions';
+import { IconLink } from '@/components/icon-link';
+import { BotonEliminarConfirmacion } from '@/components/boton-eliminar-confirmacion';
+import { IconVer, IconEditar } from '@/components/icons';
 
 // Esta página usa la clave de servicio (service_role) para listar todos
 // los usuarios: debe ejecutarse en cada petición, nunca prerenderizarse
@@ -15,6 +18,11 @@ const ETIQUETA_ROL: Record<string, string> = {
 
 export default async function PaginaUsuarios() {
   const supabaseAdmin = crearClienteAdmin();
+
+  const supabase = await crearClienteServidor();
+  const {
+    data: { user: usuarioActual },
+  } = await supabase.auth.getUser();
 
   const { data: perfiles, error } = await supabaseAdmin
     .from('perfiles')
@@ -64,11 +72,7 @@ export default async function PaginaUsuarios() {
           <tbody className="divide-y divide-torat-moshe-gray/10">
             {perfiles?.map((perfil) => (
               <tr key={perfil.id}>
-                <td className="px-4 py-2">
-                  <Link href={`/usuarios/${perfil.id}`} className="text-torat-moshe-navy hover:underline">
-                    {perfil.nombre_completo}
-                  </Link>
-                </td>
+                <td className="px-4 py-2">{perfil.nombre_completo}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">
                   {emailPorId.get(perfil.id) ?? '—'}
                 </td>
@@ -85,23 +89,26 @@ export default async function PaginaUsuarios() {
                   </span>
                 </td>
                 <td className="px-4 py-2 text-right">
-                  <Link
-                    href={`/usuarios/${perfil.id}/editar`}
-                    className="mr-3 text-torat-moshe-navy hover:underline"
-                  >
-                    Editar
-                  </Link>
-                  <form
-                    action={async () => {
-                      'use server';
-                      await cambiarActivoUsuario(perfil.id, !perfil.activo);
-                    }}
-                    className="inline"
-                  >
-                    <button type="submit" className="text-torat-moshe-gray hover:underline">
-                      {perfil.activo ? 'Desactivar' : 'Activar'}
-                    </button>
-                  </form>
+                  <div className="flex justify-end gap-1">
+                    <IconLink href={`/usuarios/${perfil.id}`} title="Ver">
+                      <IconVer className="h-4 w-4" />
+                    </IconLink>
+                    <IconLink href={`/usuarios/${perfil.id}/editar`} title="Editar">
+                      <IconEditar className="h-4 w-4" />
+                    </IconLink>
+                    {perfil.id !== usuarioActual?.id && (
+                      <form
+                        action={async () => {
+                          'use server';
+                          await eliminarUsuario(perfil.id);
+                        }}
+                      >
+                        <BotonEliminarConfirmacion
+                          mensaje={`¿Eliminar el usuario "${perfil.nombre_completo}"? Perderá el acceso permanentemente. Esta acción no se puede deshacer.`}
+                        />
+                      </form>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

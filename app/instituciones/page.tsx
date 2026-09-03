@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/server';
-import { cambiarActivoInstitucion } from './actions';
+import { eliminarInstitucion } from './actions';
+import { IconLink } from '@/components/icon-link';
+import { BotonEliminarConfirmacion } from '@/components/boton-eliminar-confirmacion';
+import { IconVer, IconEditar } from '@/components/icons';
 
 export default async function PaginaInstituciones() {
   const supabase = await crearClienteServidor();
@@ -47,11 +50,7 @@ export default async function PaginaInstituciones() {
           <tbody className="divide-y divide-torat-moshe-gray/10">
             {instituciones?.map((inst) => (
               <tr key={inst.id}>
-                <td className="px-4 py-2">
-                  <Link href={`/instituciones/${inst.id}`} className="text-torat-moshe-navy hover:underline">
-                    {inst.nombre}
-                  </Link>
-                </td>
+                <td className="px-4 py-2">{inst.nombre}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{inst.email_contacto ?? '—'}</td>
                 <td className="px-4 py-2">
                   <span
@@ -63,23 +62,24 @@ export default async function PaginaInstituciones() {
                   </span>
                 </td>
                 <td className="px-4 py-2 text-right">
-                  <Link
-                    href={`/instituciones/${inst.id}/editar`}
-                    className="mr-3 text-torat-moshe-navy hover:underline"
-                  >
-                    Editar
-                  </Link>
-                  <form
-                    action={async () => {
-                      'use server';
-                      await cambiarActivoInstitucion(inst.id, !inst.activo);
-                    }}
-                    className="inline"
-                  >
-                    <button type="submit" className="text-torat-moshe-gray hover:underline">
-                      {inst.activo ? 'Desactivar' : 'Activar'}
-                    </button>
-                  </form>
+                  <div className="flex justify-end gap-1">
+                    <IconLink href={`/instituciones/${inst.id}`} title="Ver">
+                      <IconVer className="h-4 w-4" />
+                    </IconLink>
+                    <IconLink href={`/instituciones/${inst.id}/editar`} title="Editar">
+                      <IconEditar className="h-4 w-4" />
+                    </IconLink>
+                    <form
+                      action={async () => {
+                        'use server';
+                        await eliminarInstitucion(inst.id);
+                      }}
+                    >
+                      <BotonEliminarConfirmacion
+                        mensaje={`¿Eliminar la institución "${inst.nombre}"? Esta acción no se puede deshacer.`}
+                      />
+                    </form>
+                  </div>
                 </td>
               </tr>
             ))}

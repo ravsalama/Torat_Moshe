@@ -29,6 +29,7 @@ export async function crearInstitucion(formData: FormData) {
 
 export async function actualizarInstitucion(id: string, formData: FormData) {
   const nombre = (formData.get('nombre') as string).trim();
+  const activo = formData.get('activo') === 'on';
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase
@@ -37,6 +38,7 @@ export async function actualizarInstitucion(id: string, formData: FormData) {
       nombre,
       email_contacto: campoTexto(formData, 'email_contacto'),
       notas: campoTexto(formData, 'notas'),
+      activo,
     })
     .eq('id', id);
 
@@ -57,4 +59,21 @@ export async function cambiarActivoInstitucion(id: string, activo: boolean) {
   }
 
   revalidatePath('/instituciones');
+}
+
+export async function eliminarInstitucion(id: string) {
+  const supabase = await crearClienteServidor();
+  const { error } = await supabase.from('instituciones').delete().eq('id', id);
+
+  if (error) {
+    // Violación de FK: hay donaciones que referencian esta institución.
+    throw new Error(
+      error.code === '23503'
+        ? 'No se puede eliminar: hay donaciones asociadas a esta institución. Desactívala en su lugar.'
+        : error.message
+    );
+  }
+
+  revalidatePath('/instituciones');
+  redirect('/instituciones');
 }

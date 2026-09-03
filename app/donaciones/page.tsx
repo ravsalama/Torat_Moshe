@@ -1,5 +1,10 @@
 import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/server';
+import { obtenerPerfilActual } from '@/lib/auth-helpers';
+import { eliminarDonacion } from './actions';
+import { IconLink } from '@/components/icon-link';
+import { BotonEliminarConfirmacion } from '@/components/boton-eliminar-confirmacion';
+import { IconVer, IconEditar } from '@/components/icons';
 import type { EstadoDonacion } from '@/types/database.types';
 
 const ETIQUETA_ESTADO: Record<EstadoDonacion, string> = {
@@ -37,6 +42,8 @@ export default async function PaginaDonaciones({
   }
 
   const { data: donaciones, error } = await consulta;
+  const perfil = await obtenerPerfilActual();
+  const esSuperAdmin = perfil?.rol === 'super_admin';
 
   const personaIds = [...new Set((donaciones ?? []).map((d) => d.persona_id))];
   const cobroIds = [
@@ -106,16 +113,13 @@ export default async function PaginaDonaciones({
               <th className="px-4 py-2 text-right font-medium text-torat-moshe-navy">Importe</th>
               <th className="px-4 py-2 text-left font-medium text-torat-moshe-navy">Fecha</th>
               <th className="px-4 py-2 text-left font-medium text-torat-moshe-navy">Estado</th>
+              <th className="px-4 py-2 text-right font-medium text-torat-moshe-navy">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-torat-moshe-gray/10">
             {donaciones?.map((don) => (
               <tr key={don.id}>
-                <td className="px-4 py-2">
-                  <Link href={`/donaciones/${don.id}`} className="text-torat-moshe-navy hover:underline">
-                    {nombrePorPersona.get(don.persona_id) ?? '—'}
-                  </Link>
-                </td>
+                <td className="px-4 py-2">{nombrePorPersona.get(don.persona_id) ?? '—'}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{don.concepto ?? '—'}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">
                   {don.cobro_id ? nombrePorCobro.get(don.cobro_id) ?? '—' : '—'}
@@ -131,12 +135,36 @@ export default async function PaginaDonaciones({
                     {ETIQUETA_ESTADO[don.estado]}
                   </span>
                 </td>
+                <td className="px-4 py-2 text-right">
+                  <div className="flex justify-end gap-1">
+                    <IconLink href={`/donaciones/${don.id}`} title="Ver">
+                      <IconVer className="h-4 w-4" />
+                    </IconLink>
+                    {esSuperAdmin && (
+                      <>
+                        <IconLink href={`/donaciones/${don.id}/editar`} title="Editar">
+                          <IconEditar className="h-4 w-4" />
+                        </IconLink>
+                        <form
+                          action={async () => {
+                            'use server';
+                            await eliminarDonacion(don.id);
+                          }}
+                        >
+                          <BotonEliminarConfirmacion
+                            mensaje="¿Eliminar esta donación? Esta acción no se puede deshacer."
+                          />
+                        </form>
+                      </>
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
 
             {donaciones?.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-torat-moshe-gray">
+                <td colSpan={7} className="px-4 py-6 text-center text-torat-moshe-gray">
                   No hay donaciones que coincidan.
                 </td>
               </tr>

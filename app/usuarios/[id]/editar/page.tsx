@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { crearClienteAdmin } from '@/lib/supabase/server';
-import { actualizarUsuario } from '../../actions';
+import { actualizarUsuario, cambiarActivoUsuario } from '../../actions';
 
 export default async function PaginaEditarUsuario({
   params,
@@ -16,7 +16,7 @@ export default async function PaginaEditarUsuario({
   const supabaseAdmin = crearClienteAdmin();
   const { data: perfil } = await supabaseAdmin
     .from('perfiles')
-    .select('id, nombre_completo, rol')
+    .select('id, nombre_completo, rol, activo')
     .eq('id', id)
     .single();
 
@@ -85,6 +85,26 @@ export default async function PaginaEditarUsuario({
           Guardar cambios
         </button>
       </form>
+
+      <div className="mt-8 max-w-lg rounded-lg border border-torat-moshe-gray/30 p-4">
+        <p className="mb-2 text-sm text-gray-700">
+          Estado actual:{' '}
+          <span className="font-medium">{perfil.activo ? 'Activo' : 'Inactivo'}</span>
+        </p>
+        <form
+          action={async () => {
+            'use server';
+            await cambiarActivoUsuario(perfil.id, !perfil.activo);
+          }}
+        >
+          <button
+            type="submit"
+            className="rounded border border-torat-moshe-gray/40 px-4 py-2 text-sm font-medium text-torat-moshe-gray hover:bg-torat-moshe-gray/10"
+          >
+            {perfil.activo ? 'Desactivar acceso' : 'Activar acceso'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

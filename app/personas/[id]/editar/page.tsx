@@ -17,7 +17,7 @@ export default async function PaginaEditarPersona({
   const { data: persona } = await supabase
     .from('personas')
     .select(
-      'id, nombre, apellidos, email, telefono, direccion, fecha_nacimiento, fecha_nacimiento_hebrea, notas'
+      'id, nombre, apellidos, email, telefono, direccion, fecha_nacimiento, fecha_nacimiento_hebrea, notas, activo'
     )
     .eq('id', id)
     .single();
@@ -115,6 +115,11 @@ export default async function PaginaEditarPersona({
             className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
           />
         </div>
+
+        <label className="flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" name="activo" defaultChecked={persona.activo} />
+          Persona activa
+        </label>
 
         <button
           type="submit"

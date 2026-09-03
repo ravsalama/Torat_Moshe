@@ -117,3 +117,29 @@ export async function cambiarActivoUsuario(id: string, activo: boolean) {
 
   revalidatePath('/usuarios');
 }
+
+export async function eliminarUsuario(id: string) {
+  const supabase = await crearClienteServidor();
+  const {
+    data: { user: usuarioActual },
+  } = await supabase.auth.getUser();
+
+  if (usuarioActual?.id === id) {
+    throw new Error('No puedes eliminar tu propio usuario.');
+  }
+
+  const supabaseAdmin = crearClienteAdmin();
+
+  const { error: errorAuth } = await supabaseAdmin.auth.admin.deleteUser(id);
+  if (errorAuth) {
+    throw new Error(errorAuth.message);
+  }
+
+  // El usuario de Auth ya se borró; el perfil debería caer solo si hay
+  // ON DELETE CASCADE en perfiles.id -> auth.users.id, pero por si acaso
+  // lo borramos también explícitamente.
+  await supabaseAdmin.from('perfiles').delete().eq('id', id);
+
+  revalidatePath('/usuarios');
+  redirect('/usuarios');
+}

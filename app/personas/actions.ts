@@ -47,6 +47,7 @@ export async function actualizarPersona(id: string, formData: FormData) {
   const nombre = (formData.get('nombre') as string).trim();
   const apellidos = (formData.get('apellidos') as string).trim();
   const fechaNacimientoStr = campoTexto(formData, 'fecha_nacimiento');
+  const activo = formData.get('activo') === 'on';
 
   const fecha_nacimiento_hebrea = fechaNacimientoStr
     ? fechaGregorianaAHebrea(new Date(`${fechaNacimientoStr}T12:00:00`))
@@ -64,6 +65,7 @@ export async function actualizarPersona(id: string, formData: FormData) {
       fecha_nacimiento: fechaNacimientoStr,
       fecha_nacimiento_hebrea,
       notas: campoTexto(formData, 'notas'),
+      activo,
     })
     .eq('id', id);
 
@@ -84,4 +86,20 @@ export async function cambiarActivo(id: string, activo: boolean) {
   }
 
   revalidatePath('/personas');
+}
+
+export async function eliminarPersona(id: string) {
+  const supabase = await crearClienteServidor();
+  const { error } = await supabase.from('personas').delete().eq('id', id);
+
+  if (error) {
+    throw new Error(
+      error.code === '23503'
+        ? 'No se puede eliminar: esta persona tiene donaciones u otros registros asociados. Desactívala en su lugar.'
+        : error.message
+    );
+  }
+
+  revalidatePath('/personas');
+  redirect('/personas');
 }

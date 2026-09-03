@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/server';
-import { cambiarActivo } from './actions';
+import { eliminarPersona } from './actions';
+import { IconLink } from '@/components/icon-link';
+import { BotonEliminarConfirmacion } from '@/components/boton-eliminar-confirmacion';
+import { IconVer, IconEditar } from '@/components/icons';
 
 export default async function PaginaPersonas({
   searchParams,
@@ -74,9 +77,7 @@ export default async function PaginaPersonas({
             {personas?.map((persona) => (
               <tr key={persona.id}>
                 <td className="px-4 py-2">
-                  <Link href={`/personas/${persona.id}`} className="text-torat-moshe-navy hover:underline">
-                    {persona.nombre} {persona.apellidos}
-                  </Link>
+                  {persona.nombre} {persona.apellidos}
                 </td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{persona.email ?? '—'}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{persona.telefono ?? '—'}</td>
@@ -92,23 +93,24 @@ export default async function PaginaPersonas({
                   </span>
                 </td>
                 <td className="px-4 py-2 text-right">
-                  <Link
-                    href={`/personas/${persona.id}/editar`}
-                    className="mr-3 text-torat-moshe-navy hover:underline"
-                  >
-                    Editar
-                  </Link>
-                  <form
-                    action={async () => {
-                      'use server';
-                      await cambiarActivo(persona.id, !persona.activo);
-                    }}
-                    className="inline"
-                  >
-                    <button type="submit" className="text-torat-moshe-gray hover:underline">
-                      {persona.activo ? 'Desactivar' : 'Activar'}
-                    </button>
-                  </form>
+                  <div className="flex justify-end gap-1">
+                    <IconLink href={`/personas/${persona.id}`} title="Ver">
+                      <IconVer className="h-4 w-4" />
+                    </IconLink>
+                    <IconLink href={`/personas/${persona.id}/editar`} title="Editar">
+                      <IconEditar className="h-4 w-4" />
+                    </IconLink>
+                    <form
+                      action={async () => {
+                        'use server';
+                        await eliminarPersona(persona.id);
+                      }}
+                    >
+                      <BotonEliminarConfirmacion
+                        mensaje={`¿Eliminar a ${persona.nombre} ${persona.apellidos}? Esta acción no se puede deshacer.`}
+                      />
+                    </form>
+                  </div>
                 </td>
               </tr>
             ))}
