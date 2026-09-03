@@ -9,7 +9,7 @@ export default async function PaginaNuevoCobro({
   const { error } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/cobros" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a cobros
       </Link>
@@ -75,6 +75,6 @@ export default async function PaginaNuevoCobro({
           Guardar cobro
         </button>
       </form>
-    </main>
+    </div>
   );
 }

@@ -29,7 +29,7 @@ export default async function PaginaEditarUsuario({
   const actualizarConId = actualizarUsuario.bind(null, perfil.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/usuarios" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a usuarios
       </Link>
@@ -85,6 +85,6 @@ export default async function PaginaEditarUsuario({
           Guardar cambios
         </button>
       </form>
-    </main>
+    </div>
   );
 }

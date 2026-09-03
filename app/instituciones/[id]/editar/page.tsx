@@ -27,7 +27,7 @@ export default async function PaginaEditarInstitucion({
   const actualizarConId = actualizarInstitucion.bind(null, institucion.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link
         href={`/instituciones/${institucion.id}`}
         className="text-sm text-torat-moshe-gray hover:underline"
@@ -80,6 +80,6 @@ export default async function PaginaEditarInstitucion({
           Guardar cambios
         </button>
       </form>
-    </main>
+    </div>
   );
 }

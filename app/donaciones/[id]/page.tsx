@@ -65,7 +65,7 @@ export default async function PaginaFichaDonacion({
   const esSuperAdmin = perfil?.rol === 'super_admin';
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link href="/donaciones" className="text-sm text-torat-moshe-gray hover:underline">
@@ -146,6 +146,6 @@ export default async function PaginaFichaDonacion({
           </Link>
         )}
       </div>
-    </main>
+    </div>
   );
 }

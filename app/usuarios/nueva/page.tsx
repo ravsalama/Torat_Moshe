@@ -9,7 +9,7 @@ export default async function PaginaNuevoUsuario({
   const { error } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/usuarios" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a usuarios
       </Link>
@@ -74,6 +74,6 @@ export default async function PaginaNuevoUsuario({
           Crear usuario
         </button>
       </form>
-    </main>
+    </div>
   );
 }

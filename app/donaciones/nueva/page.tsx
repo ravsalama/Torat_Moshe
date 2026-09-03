@@ -31,7 +31,7 @@ export default async function PaginaNuevaDonacion({
   const hoy = new Date().toISOString().slice(0, 10);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/donaciones" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a donaciones
       </Link>
@@ -157,6 +157,6 @@ export default async function PaginaNuevaDonacion({
           Guardar donación
         </button>
       </form>
-    </main>
+    </div>
   );
 }

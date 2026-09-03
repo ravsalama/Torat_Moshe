@@ -10,7 +10,7 @@ export default async function PaginaInstituciones() {
     .order('nombre', { ascending: true });
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link href="/" className="text-sm text-torat-moshe-gray hover:underline">
@@ -94,6 +94,6 @@ export default async function PaginaInstituciones() {
           </tbody>
         </table>
       </div>
-    </main>
+    </div>
   );
 }

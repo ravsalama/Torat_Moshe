@@ -45,7 +45,7 @@ export default async function PaginaEditarNajala({
   const actualizarConId = actualizarNajala.bind(null, id, najala.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href={`/personas/${id}`} className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a la ficha
       </Link>
@@ -217,6 +217,6 @@ export default async function PaginaEditarNajala({
           Guardar cambios
         </button>
       </form>
-    </main>
+    </div>
   );
 }

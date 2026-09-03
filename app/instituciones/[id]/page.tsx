@@ -32,7 +32,7 @@ export default async function PaginaFichaInstitucion({
   }
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link href="/instituciones" className="text-sm text-torat-moshe-gray hover:underline">
@@ -65,6 +65,6 @@ export default async function PaginaFichaInstitucion({
           <Campo etiqueta="Notas" valor={institucion.notas} />
         </div>
       </dl>
-    </main>
+    </div>
   );
 }

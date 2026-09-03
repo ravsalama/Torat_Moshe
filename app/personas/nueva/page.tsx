@@ -9,7 +9,7 @@ export default async function PaginaNuevaPersona({
   const { error } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/personas" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a personas
       </Link>
@@ -92,6 +92,6 @@ export default async function PaginaNuevaPersona({
           Guardar persona
         </button>
       </form>
-    </main>
+    </div>
   );
 }

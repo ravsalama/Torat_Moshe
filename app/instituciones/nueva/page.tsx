@@ -9,7 +9,7 @@ export default async function PaginaNuevaInstitucion({
   const { error } = await searchParams;
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href="/instituciones" className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a instituciones
       </Link>
@@ -54,6 +54,6 @@ export default async function PaginaNuevaInstitucion({
           Guardar institución
         </button>
       </form>
-    </main>
+    </div>
   );
 }

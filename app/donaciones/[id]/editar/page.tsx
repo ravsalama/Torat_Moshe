@@ -43,7 +43,7 @@ export default async function PaginaEditarDonacion({
   const actualizarConId = actualizarDonacion.bind(null, donacion.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link
         href={`/donaciones/${donacion.id}`}
         className="text-sm text-torat-moshe-gray hover:underline"
@@ -197,6 +197,6 @@ export default async function PaginaEditarDonacion({
           Guardar cambios
         </button>
       </form>
-    </main>
+    </div>
   );
 }

@@ -44,7 +44,7 @@ export default async function PaginaFichaCobro({
     .reduce((sum, d) => sum + Number(d.monto), 0);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link href="/cobros" className="text-sm text-torat-moshe-gray hover:underline">
@@ -91,6 +91,6 @@ export default async function PaginaFichaCobro({
           Ver todas las donaciones de este cobro →
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

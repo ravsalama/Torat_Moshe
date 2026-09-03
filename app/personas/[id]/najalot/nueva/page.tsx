@@ -43,7 +43,7 @@ export default async function PaginaNuevaNajala({
   const crearConId = crearNajala.bind(null, persona.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href={`/personas/${persona.id}`} className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a la ficha
       </Link>
@@ -206,6 +206,6 @@ export default async function PaginaNuevaNajala({
           Guardar Najalot
         </button>
       </form>
-    </main>
+    </div>
   );
 }

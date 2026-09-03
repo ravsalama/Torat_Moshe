@@ -14,7 +14,7 @@ export default async function PaginaCancelarDonacion({
   const cancelarConId = cancelarDonacion.bind(null, id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href={`/donaciones/${id}`} className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a la ficha
       </Link>
@@ -44,6 +44,6 @@ export default async function PaginaCancelarDonacion({
           Confirmar cancelación
         </button>
       </form>
-    </main>
+    </div>
   );
 }

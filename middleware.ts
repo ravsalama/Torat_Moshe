@@ -10,6 +10,13 @@ const RUTAS_SUPER_ADMIN = ['/configuracion', '/auditoria', '/usuarios'];
 const RUTAS_PUBLICAS = ['/login'];
 
 export async function middleware(request: NextRequest) {
+  // Los Server Components solo ven headers de PETICIÓN (los que llegan
+  // al servidor), nunca los que una respuesta de middleware añada por su
+  // cuenta. Por eso mutamos request.headers aquí -- antes de que
+  // actualizarSesion() construya sus propias respuestas NextResponse.next({ request })
+  // -- para que ese header viaje con la petición hasta el layout raíz.
+  request.headers.set('x-pathname', request.nextUrl.pathname);
+
   const { respuesta, user } = await actualizarSesion(request);
   const { pathname } = request.nextUrl;
 

@@ -27,7 +27,7 @@ export default async function PaginaEditarCobro({
   const actualizarConId = actualizarCobro.bind(null, cobro.id);
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <Link href={`/cobros/${cobro.id}`} className="text-sm text-torat-moshe-gray hover:underline">
         ← Volver a la ficha
       </Link>
@@ -97,6 +97,6 @@ export default async function PaginaEditarCobro({
           Guardar cambios
         </button>
       </form>
-    </main>
+    </div>
   );
 }

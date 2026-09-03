@@ -41,7 +41,7 @@ export default async function PaginaFichaPersona({
     .order('nombre_familiar', { ascending: true });
 
   return (
-    <main className="min-h-screen bg-white p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link href="/personas" className="text-sm text-torat-moshe-gray hover:underline">
@@ -141,6 +141,6 @@ export default async function PaginaFichaPersona({
           </p>
         )}
       </div>
-    </main>
+    </div>
   );
 }
