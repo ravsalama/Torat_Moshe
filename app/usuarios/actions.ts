@@ -31,12 +31,12 @@ export async function crearUsuario(formData: FormData) {
     );
   }
 
-  const { error: errorPerfil } = await supabaseAdmin.from('perfiles').insert({
-    id: data.user.id,
-    nombre_completo,
-    rol,
-    activo: true,
-  });
+  const { error: errorPerfil } = await supabaseAdmin
+    .from('perfiles')
+    .upsert(
+      { id: data.user.id, nombre_completo, rol, activo: true },
+      { onConflict: 'id' }
+    );
 
   if (errorPerfil) {
     // Evitar dejar un usuario de Auth huérfano sin perfil.
