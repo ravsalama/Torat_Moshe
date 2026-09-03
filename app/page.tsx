@@ -31,14 +31,34 @@ export default async function PaginaInicio() {
       </p>
 
       {(esStaff || esSuperAdmin) && (
-        <nav className="mt-6 flex gap-4">
+        <nav className="mt-6 flex flex-wrap gap-4">
           {esStaff && (
-            <Link
-              href="/personas"
-              className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
-            >
-              Personas / Congregantes
-            </Link>
+            <>
+              <Link
+                href="/personas"
+                className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+              >
+                Personas / Congregantes
+              </Link>
+              <Link
+                href="/donaciones"
+                className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+              >
+                Donaciones
+              </Link>
+              <Link
+                href="/cobros"
+                className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+              >
+                Cobros / Campañas
+              </Link>
+              <Link
+                href="/instituciones"
+                className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+              >
+                Instituciones
+              </Link>
+            </>
           )}
           {esSuperAdmin && (
             <Link

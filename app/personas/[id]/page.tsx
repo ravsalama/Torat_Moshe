@@ -58,12 +58,20 @@ export default async function PaginaFichaPersona({
             {persona.activo ? 'Activo' : 'Inactivo'}
           </span>
         </div>
-        <Link
-          href={`/personas/${persona.id}/editar`}
-          className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
-        >
-          Editar
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href={`/donaciones/nueva?persona=${persona.id}`}
+            className="rounded border border-torat-moshe-navy px-4 py-2 text-sm font-medium text-torat-moshe-navy hover:bg-torat-moshe-navy/5"
+          >
+            + Donación
+          </Link>
+          <Link
+            href={`/personas/${persona.id}/editar`}
+            className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+          >
+            Editar
+          </Link>
+        </div>
       </div>
 
       <dl className="grid max-w-lg grid-cols-2 gap-4 rounded-lg border border-torat-moshe-gray/30 p-6">
