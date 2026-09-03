@@ -158,6 +158,41 @@ export function parashaDeLaSemana(fecha: Date = new Date()): string {
   return sedra.getString(hdate);
 }
 
+export type DiaCalendario = {
+  fecha: Date;
+  diaGregoriano: number;
+  diaHebreo: number;
+  mesHebreo: string;
+  esShabat: boolean;
+  parasha: string | null;
+};
+
+/**
+ * Genera todos los días de un mes gregoriano (anio, mes 1-12) con su
+ * equivalente hebreo y, para cada Shabbat (sábado), la Parashá de esa
+ * semana. Pensado para pintar una vista de calendario mensual.
+ */
+export function calendarioDelMes(anio: number, mes: number): DiaCalendario[] {
+  const ultimoDia = new Date(anio, mes, 0, 12);
+  const dias: DiaCalendario[] = [];
+
+  for (let d = 1; d <= ultimoDia.getDate(); d++) {
+    const fecha = new Date(anio, mes - 1, d, 12);
+    const hdate = new HDate(fecha);
+    const esShabat = fecha.getDay() === 6;
+    dias.push({
+      fecha,
+      diaGregoriano: d,
+      diaHebreo: hdate.getDate(),
+      mesHebreo: nombreMesEnEspanol(hdate),
+      esShabat,
+      parasha: esShabat ? parashaDeLaSemana(fecha) : null,
+    });
+  }
+
+  return dias;
+}
+
 /**
  * Devuelve los eventos del calendario hebreo (festividades, Rosh Jodesh,
  * etc.) entre dos fechas gregorianas, respetando la config diáspora/Israel.

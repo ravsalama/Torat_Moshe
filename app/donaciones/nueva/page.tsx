@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/server';
 import { crearDonacion } from '../actions';
+import { CampoImporteConMatenatYado } from '@/components/campo-importe-matenat-yado';
 
 export default async function PaginaNuevaDonacion({
   searchParams,
@@ -61,27 +62,7 @@ export default async function PaginaNuevaDonacion({
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-700">Importe *</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              name="monto"
-              required
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700">Moneda</label>
-            <input
-              name="moneda"
-              defaultValue="EUR"
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-          </div>
-        </div>
+        <CampoImporteConMatenatYado />
 
         <div>
           <label className="block text-sm text-gray-700">Fecha *</label>

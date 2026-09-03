@@ -42,7 +42,7 @@ export default async function PaginaFichaDonacion({
   const { data: donacion } = await supabase
     .from('donaciones')
     .select(
-      'id, persona_id, cobro_id, institucion_id, monto, moneda, concepto, estado, metodo_pago, fecha, notas'
+      'id, persona_id, cobro_id, institucion_id, monto, moneda, concepto, estado, metodo_pago, fecha, notas, es_matenat_yado'
     )
     .eq('id', id)
     .single();
@@ -79,6 +79,11 @@ export default async function PaginaFichaDonacion({
           >
             {ETIQUETA_ESTADO[donacion.estado]}
           </span>
+          {donacion.es_matenat_yado && (
+            <span className="mt-1 ml-2 inline-block rounded-full bg-torat-moshe-navy/10 px-2 py-0.5 text-xs font-medium text-torat-moshe-navy">
+              Matenat Yado
+            </span>
+          )}
         </div>
         {esSuperAdmin && (
           <div className="flex gap-2">

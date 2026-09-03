@@ -18,6 +18,7 @@ export async function crearDonacion(formData: FormData) {
   const fecha = formData.get('fecha') as string;
   const cobro_id = campoTexto(formData, 'cobro_id');
   const institucion_id = campoTexto(formData, 'institucion_id');
+  const es_matenat_yado = formData.get('es_matenat_yado') === 'on';
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase.from('donaciones').insert({
@@ -30,6 +31,7 @@ export async function crearDonacion(formData: FormData) {
     estado: 'pendiente',
     fecha,
     notas: campoTexto(formData, 'notas'),
+    es_matenat_yado,
   });
 
   if (error) {
@@ -48,11 +50,14 @@ export async function crearDonacion(formData: FormData) {
  */
 export async function marcarDonacionPagada(donacionId: string, formData: FormData) {
   const metodo_pago = formData.get('metodo_pago') as MetodoPago;
+  const montoStr = (formData.get('monto') as string | null)?.trim();
+  const monto = montoStr ? Number(montoStr) : null;
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase.rpc('marcar_donacion_pagada', {
     p_donacion_id: donacionId,
     p_metodo_pago: metodo_pago,
+    p_monto: monto ?? undefined,
   });
 
   if (error) {
@@ -108,6 +113,7 @@ export async function actualizarDonacion(id: string, formData: FormData) {
   const metodo_pago = (formData.get('metodo_pago') as MetodoPago | '') || null;
   const cobro_id = campoTexto(formData, 'cobro_id');
   const institucion_id = campoTexto(formData, 'institucion_id');
+  const es_matenat_yado = formData.get('es_matenat_yado') === 'on';
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase
@@ -123,6 +129,7 @@ export async function actualizarDonacion(id: string, formData: FormData) {
       metodo_pago,
       fecha,
       notas: campoTexto(formData, 'notas'),
+      es_matenat_yado,
     })
     .eq('id', id);
 

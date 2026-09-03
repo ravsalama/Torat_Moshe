@@ -108,6 +108,7 @@ export interface Database {
           metodo_pago: MetodoPago | null;
           fecha: string;
           notas: string | null;
+          es_matenat_yado: boolean;
           created_by: string | null;
           updated_by: string | null;
           created_at: string;
@@ -222,7 +223,7 @@ export interface Database {
         }[];
       };
       marcar_donacion_pagada: {
-        Args: { p_donacion_id: string; p_metodo_pago: MetodoPago };
+        Args: { p_donacion_id: string; p_metodo_pago: MetodoPago; p_monto?: number };
         Returns: void;
       };
       cancelar_donacion: {

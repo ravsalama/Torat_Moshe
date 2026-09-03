@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { crearClienteServidor } from '@/lib/supabase/server';
 import { obtenerPerfilActual } from '@/lib/auth-helpers';
 import { actualizarDonacion } from '../../actions';
+import { CampoImporteConMatenatYado } from '@/components/campo-importe-matenat-yado';
 
 export default async function PaginaEditarDonacion({
   params,
@@ -25,7 +26,7 @@ export default async function PaginaEditarDonacion({
   const { data: donacion } = await supabase
     .from('donaciones')
     .select(
-      'id, persona_id, cobro_id, institucion_id, monto, moneda, concepto, estado, metodo_pago, fecha, notas'
+      'id, persona_id, cobro_id, institucion_id, monto, moneda, concepto, estado, metodo_pago, fecha, notas, es_matenat_yado'
     )
     .eq('id', id)
     .single();
@@ -73,28 +74,11 @@ export default async function PaginaEditarDonacion({
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-700">Importe *</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              name="monto"
-              required
-              defaultValue={donacion.monto}
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700">Moneda</label>
-            <input
-              name="moneda"
-              defaultValue={donacion.moneda}
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-          </div>
-        </div>
+        <CampoImporteConMatenatYado
+          montoInicial={String(donacion.monto)}
+          monedaInicial={donacion.moneda}
+          matenatYadoInicial={donacion.es_matenat_yado}
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <div>

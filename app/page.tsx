@@ -5,8 +5,10 @@ import {
   fechaGregorianaADiaYMesHebreo,
   proximaFechaNajalot,
   parashaDeLaSemana,
+  calendarioDelMes,
 } from '@/lib/hebcal';
 import { IconPersonas, IconMonedas, IconReloj, IconUsuarios, IconVela, IconTarta } from '@/components/icons';
+import { CalendarioMes } from '@/components/calendario-mes';
 
 function formatoEuros(n: number) {
   return `${n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
@@ -51,7 +53,13 @@ function StatCard({
   );
 }
 
-export default async function PaginaInicio() {
+export default async function PaginaInicio({
+  searchParams,
+}: {
+  searchParams: Promise<{ mes?: string }>;
+}) {
+  const { mes: mesParam } = await searchParams;
+
   const supabase = await crearClienteServidor();
   const {
     data: { user },
@@ -71,6 +79,16 @@ export default async function PaginaInicio() {
   const esSuperAdmin = perfil?.rol === 'super_admin';
   const parasha = parashaDeLaSemana();
 
+  const hoy = new Date();
+  let anioCalendario = hoy.getFullYear();
+  let mesCalendario = hoy.getMonth() + 1;
+  if (mesParam && /^\d{4}-\d{2}$/.test(mesParam)) {
+    const [a, m] = mesParam.split('-').map(Number);
+    anioCalendario = a;
+    mesCalendario = m;
+  }
+  const diasDelMes = calendarioDelMes(anioCalendario, mesCalendario);
+
   // --- Datos solo para staff (RLS impide a "parnas" leer estas tablas) ---
   let totalCongregantes = 0;
   let totalRecaudadoMes = 0;
@@ -86,6 +104,11 @@ export default async function PaginaInicio() {
     const primerDiaMesSiguiente = new Date(primerDiaMes);
     primerDiaMesSiguiente.setMonth(primerDiaMesSiguiente.getMonth() + 1);
     const primerDiaMesSiguienteStr = primerDiaMesSiguiente.toISOString().slice(0, 10);
+
+    const enUnMes = new Date();
+    enUnMes.setMonth(enUnMes.getMonth() + 1);
+    const enQuinceDias = new Date();
+    enQuinceDias.setDate(enQuinceDias.getDate() + 15);
 
     const [
       { count: countPersonas },
@@ -114,14 +137,16 @@ export default async function PaginaInicio() {
     totalRecaudadoMes = (donacionesMes ?? []).reduce((s, d) => s + Number(d.monto), 0);
     totalPendiente = (donacionesPendientes ?? []).reduce((s, d) => s + Number(d.monto), 0);
 
+    // Próximos Najalot: solo dentro del próximo mes.
     proximosNajalot = (najalotRows ?? [])
       .map((n) => ({
         etiqueta: `${n.nombre_familiar} (${n.relacion_familiar})`,
         fecha: proximaFechaNajalot(n.dia_hebreo, n.mes_hebreo),
       }))
-      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
-      .slice(0, 6);
+      .filter((n) => n.fecha <= enUnMes)
+      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
 
+    // Próximos cumpleaños: solo dentro de los próximos 15 días.
     proximosCumpleanos = (personasCumple ?? [])
       .filter((p) => p.fecha_nacimiento)
       .map((p) => {
@@ -131,8 +156,8 @@ export default async function PaginaInicio() {
           fecha: proximaFechaNajalot(dia, mes),
         };
       })
-      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
-      .slice(0, 6);
+      .filter((c) => c.fecha <= enQuinceDias)
+      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
 
     if (esSuperAdmin) {
       const { count } = await supabase
@@ -193,60 +218,77 @@ export default async function PaginaInicio() {
             )}
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-5">
-              <div className="mb-3 flex items-center gap-2">
-                <IconVela className="h-5 w-5 text-torat-moshe-navy" />
-                <h2 className="text-sm font-semibold text-torat-moshe-navy">Próximos Najalot</h2>
-              </div>
-              {proximosNajalot.length > 0 ? (
-                <ul className="divide-y divide-torat-moshe-gray/10">
-                  {proximosNajalot.map((n, i) => (
-                    <li key={i} className="flex items-center justify-between py-2 text-sm">
-                      <span className="text-gray-900">{n.etiqueta}</span>
-                      <span className="text-torat-moshe-gray">
-                        {formatoFecha(n.fecha)} · {enDias(n.fecha)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-torat-moshe-gray">No hay Najalot registrados.</p>
-              )}
+          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <CalendarioMes anio={anioCalendario} mes={mesCalendario} dias={diasDelMes} />
             </div>
 
-            <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-5">
-              <div className="mb-3 flex items-center gap-2">
-                <IconTarta className="h-5 w-5 text-torat-moshe-navy" />
-                <h2 className="text-sm font-semibold text-torat-moshe-navy">
-                  Próximos cumpleaños
-                </h2>
+            <div className="flex flex-col gap-4">
+              <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <IconVela className="h-5 w-5 text-torat-moshe-navy" />
+                  <h2 className="text-sm font-semibold text-torat-moshe-navy">
+                    Najalot (próximo mes)
+                  </h2>
+                </div>
+                {proximosNajalot.length > 0 ? (
+                  <ul className="divide-y divide-torat-moshe-gray/10">
+                    {proximosNajalot.map((n, i) => (
+                      <li key={i} className="flex items-center justify-between py-2 text-sm">
+                        <span className="text-gray-900">{n.etiqueta}</span>
+                        <span className="text-right text-xs text-torat-moshe-gray">
+                          {formatoFecha(n.fecha)}
+                          <br />
+                          {enDias(n.fecha)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-torat-moshe-gray">
+                    No hay Najalot en el próximo mes.
+                  </p>
+                )}
               </div>
-              {proximosCumpleanos.length > 0 ? (
-                <ul className="divide-y divide-torat-moshe-gray/10">
-                  {proximosCumpleanos.map((c, i) => (
-                    <li key={i} className="flex items-center justify-between py-2 text-sm">
-                      <span className="text-gray-900">{c.etiqueta}</span>
-                      <span className="text-torat-moshe-gray">
-                        {formatoFecha(c.fecha)} · {enDias(c.fecha)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-torat-moshe-gray">
-                  Ningún congregante tiene fecha de nacimiento registrada.
-                </p>
-              )}
+
+              <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <IconTarta className="h-5 w-5 text-torat-moshe-navy" />
+                  <h2 className="text-sm font-semibold text-torat-moshe-navy">
+                    Cumpleaños (15 días)
+                  </h2>
+                </div>
+                {proximosCumpleanos.length > 0 ? (
+                  <ul className="divide-y divide-torat-moshe-gray/10">
+                    {proximosCumpleanos.map((c, i) => (
+                      <li key={i} className="flex items-center justify-between py-2 text-sm">
+                        <span className="text-gray-900">{c.etiqueta}</span>
+                        <span className="text-right text-xs text-torat-moshe-gray">
+                          {formatoFecha(c.fecha)}
+                          <br />
+                          {enDias(c.fecha)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-torat-moshe-gray">
+                    Ningún cumpleaños en los próximos 15 días.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </>
       ) : (
-        <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-6">
-          <p className="text-sm text-torat-moshe-gray">
-            Tu rol actual es <span className="font-medium">{perfil?.rol ?? 'sin asignar'}</span>.
-            El calendario con los próximos Najalot y cumpleaños para este rol está en camino.
-          </p>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <CalendarioMes anio={anioCalendario} mes={mesCalendario} dias={diasDelMes} />
+          <div className="rounded-lg border border-torat-moshe-gray/20 bg-white p-6">
+            <p className="text-sm text-torat-moshe-gray">
+              Tu rol actual es <span className="font-medium">{perfil?.rol ?? 'sin asignar'}</span>.
+              La lista de próximos Najalot y cumpleaños para este rol está en camino.
+            </p>
+          </div>
         </div>
       )}
     </div>
