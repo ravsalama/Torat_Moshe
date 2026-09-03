@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { RolUsuario } from '@/types/database.types';
 import {
   IconDashboard,
@@ -34,14 +35,15 @@ export function Sidebar({ rol, pathname }: { rol: RolUsuario | null; pathname: s
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-torat-moshe-gray/20 bg-[#122744] md:flex">
-      <div className="flex items-center gap-2 px-6 py-6">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-torat-moshe-navy-light/30 text-sm font-semibold text-white">
-          TM
-        </div>
-        <span className="text-sm font-semibold leading-tight text-white">
-          Torat Moshe
-          <span className="block text-xs font-normal text-white/50">Sistema de gestión</span>
-        </span>
+      <div className="flex items-center gap-3 px-6 py-6">
+        <Image
+          src="/logo.png"
+          alt="Torat Moshe"
+          width={44}
+          height={44}
+          className="rounded-md"
+        />
+        <span className="text-xs font-normal text-white/50">Sistema de gestión</span>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">

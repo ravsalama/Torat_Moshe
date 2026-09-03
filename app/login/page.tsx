@@ -1,5 +1,6 @@
 import { crearClienteServidor } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import Image from 'next/image';
 
 async function iniciarSesion(formData: FormData) {
   'use server';
@@ -25,7 +26,8 @@ export default async function PaginaLogin({
   const { error } = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-white">
+      <Image src="/logo.png" alt="Sinagoga Torat Moshe" width={120} height={124} className="rounded-xl" />
       <form
         action={iniciarSesion}
         className="w-full max-w-sm space-y-4 rounded-lg border border-torat-moshe-gray/30 p-8"

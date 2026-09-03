@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { cerrarSesion } from '@/lib/auth-actions';
 import { IconSalir } from './icons';
 
@@ -23,7 +24,10 @@ export function Topbar({
 
   return (
     <header className="flex items-center justify-between border-b border-torat-moshe-gray/20 bg-white px-6 py-3">
-      <div className="text-sm text-torat-moshe-gray md:hidden">Torat Moshe</div>
+      <div className="flex items-center gap-2 md:hidden">
+        <Image src="/logo.png" alt="Torat Moshe" width={28} height={28} className="rounded" />
+        <span className="text-sm text-torat-moshe-gray">Torat Moshe</span>
+      </div>
       <div className="hidden text-sm text-torat-moshe-gray md:block" />
 
       <div className="flex items-center gap-3">
