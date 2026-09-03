@@ -19,6 +19,7 @@ export default async function PaginaInicio() {
     .single();
 
   const esStaff = perfil?.rol === 'super_admin' || perfil?.rol === 'gestor';
+  const esSuperAdmin = perfil?.rol === 'super_admin';
 
   return (
     <main className="min-h-screen bg-white p-8">
@@ -29,14 +30,24 @@ export default async function PaginaInicio() {
         Rol actual: <span className="font-medium">{perfil?.rol ?? 'sin asignar'}</span>
       </p>
 
-      {esStaff && (
+      {(esStaff || esSuperAdmin) && (
         <nav className="mt-6 flex gap-4">
-          <Link
-            href="/personas"
-            className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
-          >
-            Personas / Congregantes
-          </Link>
+          {esStaff && (
+            <Link
+              href="/personas"
+              className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+            >
+              Personas / Congregantes
+            </Link>
+          )}
+          {esSuperAdmin && (
+            <Link
+              href="/usuarios"
+              className="rounded bg-torat-moshe-navy px-4 py-2 text-sm font-medium text-white hover:bg-torat-moshe-navy-dark"
+            >
+              Usuarios
+            </Link>
+          )}
         </nav>
       )}
 

@@ -5,7 +5,7 @@ import { crearClienteServidor } from '@/lib/supabase/server';
 // Rutas que requieren rol 'gestor' o 'super_admin' (parnas no puede entrar)
 const RUTAS_STAFF = ['/personas', '/donaciones', '/cobros', '/plantillas'];
 // Rutas exclusivas de super_admin
-const RUTAS_SUPER_ADMIN = ['/configuracion', '/auditoria'];
+const RUTAS_SUPER_ADMIN = ['/configuracion', '/auditoria', '/usuarios'];
 // Rutas públicas (no requieren sesión)
 const RUTAS_PUBLICAS = ['/login'];
 
