@@ -8,6 +8,52 @@ import { HDate, HebrewCalendar, Sedra, gematriya, months } from '@hebcal/core';
 export const IL = process.env.NEXT_PUBLIC_HEBCAL_ISRAEL === 'true';
 
 /**
+ * Lista de meses hebreos en español, en orden, para usar en formularios
+ * (selects). Incluye Adar I / Adar II para años embolísmicos; si el
+ * calendario del año en curso no los tiene, no pasa nada por ofrecerlos
+ * igualmente como opción.
+ */
+export const MESES_HEBREOS = [
+  'Tishrei',
+  'Jeshván',
+  'Kislev',
+  'Tevet',
+  'Shevat',
+  'Adar',
+  'Adar I',
+  'Adar II',
+  'Nisán',
+  'Iyar',
+  'Siván',
+  'Tamuz',
+  'Av',
+  'Elul',
+] as const;
+
+/**
+ * Convierte un día/mes/año gregoriano a día/mes hebreo. Si se conoce el
+ * año, la conversión es exacta (año hebreo incluido). Si no se conoce el
+ * año, se usa el año en curso solo para poder calcular un día/mes hebreo
+ * aproximado -- ADVERTENCIA: sin año, un mismo día/mes gregoriano no cae
+ * siempre en el mismo día/mes hebreo, así que el resultado es solo una
+ * referencia orientativa hasta que se sepa el año real.
+ */
+export function gregorianoADiaMesAnioHebreo(
+  dia: number,
+  mes: number,
+  anio?: number
+): { dia: number; mes: string; anio: number | null } {
+  const anioAUsar = anio ?? new Date().getFullYear();
+  const fecha = new Date(anioAUsar, mes - 1, dia, 12);
+  const hdate = new HDate(fecha);
+  return {
+    dia: hdate.getDate(),
+    mes: nombreMesEnEspanol(hdate),
+    anio: anio ? hdate.getFullYear() : null,
+  };
+}
+
+/**
  * Convierte una fecha gregoriana a su equivalente hebreo, devuelto como
  * texto legible en español (p.ej. "15 de Nisán"). Se usa al crear/editar
  * una persona, para rellenar personas.fecha_nacimiento_hebrea.

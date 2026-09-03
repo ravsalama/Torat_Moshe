@@ -91,32 +91,19 @@ export default async function PaginaEditarPersona({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-700">Fecha de nacimiento</label>
-            <input
-              type="date"
-              name="fecha_nacimiento"
-              defaultValue={persona.fecha_nacimiento ?? ''}
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-            {persona.fecha_nacimiento_hebrea && (
-              <p className="mt-1 text-xs text-torat-moshe-gray">
-                Actual: {persona.fecha_nacimiento_hebrea}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700">Fecha de Najalot (si aplica)</label>
-            <input
-              type="date"
-              name="fecha_najalot"
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
+        <div>
+          <label className="block text-sm text-gray-700">Fecha de nacimiento</label>
+          <input
+            type="date"
+            name="fecha_nacimiento"
+            defaultValue={persona.fecha_nacimiento ?? ''}
+            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
+          />
+          {persona.fecha_nacimiento_hebrea && (
             <p className="mt-1 text-xs text-torat-moshe-gray">
-              Déjalo vacío para no modificar el Najalot ya guardado.
+              Actual: {persona.fecha_nacimiento_hebrea}
             </p>
-          </div>
+          )}
         </div>
 
         <div>

@@ -64,29 +64,16 @@ export default async function PaginaNuevaPersona({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-700">Fecha de nacimiento</label>
-            <input
-              type="date"
-              name="fecha_nacimiento"
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-            <p className="mt-1 text-xs text-torat-moshe-gray">
-              La fecha hebrea equivalente se calcula automáticamente.
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700">Fecha de Najalot (si aplica)</label>
-            <input
-              type="date"
-              name="fecha_najalot"
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            />
-            <p className="mt-1 text-xs text-torat-moshe-gray">
-              Se convierte a día/mes hebreo automáticamente.
-            </p>
-          </div>
+        <div>
+          <label className="block text-sm text-gray-700">Fecha de nacimiento</label>
+          <input
+            type="date"
+            name="fecha_nacimiento"
+            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
+          />
+          <p className="mt-1 text-xs text-torat-moshe-gray">
+            La fecha hebrea equivalente se calcula automáticamente.
+          </p>
         </div>
 
         <div>

@@ -47,8 +47,6 @@ export interface Database {
           direccion: string | null;
           fecha_nacimiento: string | null;
           fecha_nacimiento_hebrea: string | null;
-          najalot_dia_hebreo: number | null;
-          najalot_mes_hebreo: string | null;
           notas: string | null;
           activo: boolean;
           created_by: string | null;
@@ -121,6 +119,36 @@ export interface Database {
           monto: number;
         };
         Update: Partial<Database['public']['Tables']['donaciones']['Row']>;
+      };
+      najalot: {
+        Row: {
+          id: string;
+          persona_id: string;
+          nombre_familiar: string;
+          relacion_familiar: string;
+          calendario_origen: 'hebreo' | 'gregoriano';
+          dia_hebreo: number;
+          mes_hebreo: string;
+          anio_hebreo: number | null;
+          dia_gregoriano: number | null;
+          mes_gregoriano: number | null;
+          anio_gregoriano: number | null;
+          notas: string | null;
+          created_by: string | null;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Relationships: [];
+        Insert: Partial<Database['public']['Tables']['najalot']['Row']> & {
+          persona_id: string;
+          nombre_familiar: string;
+          relacion_familiar: string;
+          calendario_origen: 'hebreo' | 'gregoriano';
+          dia_hebreo: number;
+          mes_hebreo: string;
+        };
+        Update: Partial<Database['public']['Tables']['najalot']['Row']>;
       };
       plantillas_email: {
         Row: {

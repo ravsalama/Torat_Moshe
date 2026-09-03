@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { crearClienteServidor } from '@/lib/supabase/server';
+import { eliminarNajala } from './najalot/actions';
 
 function Campo({ etiqueta, valor }: { etiqueta: string; valor: string | null | undefined }) {
   return (
@@ -24,7 +25,7 @@ export default async function PaginaFichaPersona({
   const { data: persona } = await supabase
     .from('personas')
     .select(
-      'id, nombre, apellidos, email, telefono, direccion, fecha_nacimiento, fecha_nacimiento_hebrea, najalot_dia_hebreo, najalot_mes_hebreo, notas, activo, created_at'
+      'id, nombre, apellidos, email, telefono, direccion, fecha_nacimiento, fecha_nacimiento_hebrea, notas, activo, created_at'
     )
     .eq('id', id)
     .single();
@@ -33,10 +34,11 @@ export default async function PaginaFichaPersona({
     notFound();
   }
 
-  const najalot =
-    persona.najalot_dia_hebreo && persona.najalot_mes_hebreo
-      ? `${persona.najalot_dia_hebreo} de ${persona.najalot_mes_hebreo}`
-      : null;
+  const { data: najalot } = await supabase
+    .from('najalot')
+    .select('id, nombre_familiar, relacion_familiar, dia_hebreo, mes_hebreo, anio_hebreo')
+    .eq('persona_id', persona.id)
+    .order('nombre_familiar', { ascending: true });
 
   return (
     <main className="min-h-screen bg-white p-8">
@@ -72,11 +74,65 @@ export default async function PaginaFichaPersona({
         </div>
         <Campo etiqueta="Fecha de nacimiento" valor={persona.fecha_nacimiento} />
         <Campo etiqueta="Fecha hebrea de nacimiento" valor={persona.fecha_nacimiento_hebrea} />
-        <Campo etiqueta="Najalot" valor={najalot} />
         <div className="col-span-2">
           <Campo etiqueta="Notas" valor={persona.notas} />
         </div>
       </dl>
+
+      <div className="mt-8 max-w-lg">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-torat-moshe-navy">Najalot</h2>
+          <Link
+            href={`/personas/${persona.id}/najalot/nueva`}
+            className="text-sm text-torat-moshe-navy hover:underline"
+          >
+            + Añadir Najalot
+          </Link>
+        </div>
+
+        {najalot && najalot.length > 0 ? (
+          <ul className="divide-y divide-torat-moshe-gray/20 rounded-lg border border-torat-moshe-gray/30">
+            {najalot.map((n) => (
+              <li key={n.id} className="flex items-center justify-between px-4 py-3 text-sm">
+                <div>
+                  <p className="font-medium text-gray-900">
+                    {n.nombre_familiar}{' '}
+                    <span className="font-normal text-torat-moshe-gray">
+                      ({n.relacion_familiar})
+                    </span>
+                  </p>
+                  <p className="text-torat-moshe-gray">
+                    {n.dia_hebreo} de {n.mes_hebreo}
+                    {n.anio_hebreo ? ` ${n.anio_hebreo}` : ''}
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <Link
+                    href={`/personas/${persona.id}/najalot/${n.id}/editar`}
+                    className="text-torat-moshe-navy hover:underline"
+                  >
+                    Editar
+                  </Link>
+                  <form
+                    action={async () => {
+                      'use server';
+                      await eliminarNajala(persona.id, n.id);
+                    }}
+                  >
+                    <button type="submit" className="text-red-600 hover:underline">
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-torat-moshe-gray">
+            Aún no hay ningún Najalot registrado para esta persona.
+          </p>
+        )}
+      </div>
     </main>
   );
 }
