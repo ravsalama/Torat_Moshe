@@ -30,6 +30,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['perfiles']['Row']> & {
           id: string;
           nombre_completo: string;
@@ -55,6 +56,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['personas']['Row']> & {
           nombre: string;
           apellidos: string;
@@ -75,6 +77,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['cobros']['Row']> & { nombre: string };
         Update: Partial<Database['public']['Tables']['cobros']['Row']>;
       };
@@ -90,6 +93,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['instituciones']['Row']> & { nombre: string };
         Update: Partial<Database['public']['Tables']['instituciones']['Row']>;
       };
@@ -111,6 +115,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['donaciones']['Row']> & {
           persona_id: string;
           monto: number;
@@ -128,6 +133,7 @@ export interface Database {
           updated_by: string | null;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['plantillas_email']['Row']> & {
           tipo: TipoPlantilla;
           asunto: string;
@@ -146,6 +152,7 @@ export interface Database {
           datos_nuevos: Record<string, unknown> | null;
           created_at: string;
         };
+        Relationships: [];
         Insert: never; // Solo se inserta vía trigger fn_audit_log()
         Update: never;
       };
@@ -157,6 +164,7 @@ export interface Database {
           updated_by: string | null;
           updated_at: string;
         };
+        Relationships: [];
         Insert: Partial<Database['public']['Tables']['configuracion']['Row']> & {
           clave: string;
           valor: unknown;
@@ -164,6 +172,7 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['configuracion']['Row']>;
       };
     };
+    Views: Record<string, never>;
     Functions: {
       obtener_cumpleanos: {
         Args: Record<string, never>;
