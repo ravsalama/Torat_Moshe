@@ -64,7 +64,11 @@ export default async function PaginaUsuarios() {
           <tbody className="divide-y divide-torat-moshe-gray/10">
             {perfiles?.map((perfil) => (
               <tr key={perfil.id}>
-                <td className="px-4 py-2">{perfil.nombre_completo}</td>
+                <td className="px-4 py-2">
+                  <Link href={`/usuarios/${perfil.id}`} className="text-torat-moshe-navy hover:underline">
+                    {perfil.nombre_completo}
+                  </Link>
+                </td>
                 <td className="px-4 py-2 text-torat-moshe-gray">
                   {emailPorId.get(perfil.id) ?? '—'}
                 </td>
