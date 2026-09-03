@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-rambam-navy: #28598F;
+  --color-rambam-gray: #A7ACAE;
+}
+
+body {
+  color: #1a1a1a;
+  background: #ffffff;
+}
