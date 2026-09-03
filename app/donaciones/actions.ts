@@ -12,7 +12,36 @@ function campoTexto(formData: FormData, campo: string): string | null {
 }
 
 export async function crearDonacion(formData: FormData) {
-  const persona_id = formData.get('persona_id') as string;
+  let persona_id = formData.get('persona_id') as string | null;
+  const nombreNuevo = (formData.get('nombre_nuevo_donante') as string | null)?.trim();
+  const apellidosNuevo = (formData.get('apellidos_nuevo_donante') as string | null)?.trim();
+
+  const supabase = await crearClienteServidor();
+
+  if (!persona_id && nombreNuevo && apellidosNuevo) {
+    const { data: nuevaPersona, error: errorPersona } = await supabase
+      .from('personas')
+      .insert({ nombre: nombreNuevo, apellidos: apellidosNuevo })
+      .select('id')
+      .single();
+
+    if (errorPersona || !nuevaPersona) {
+      redirect(
+        `/donaciones/nueva?error=${encodeURIComponent(
+          errorPersona?.message ?? 'No se pudo crear el nuevo congregante.'
+        )}`
+      );
+    }
+
+    persona_id = nuevaPersona!.id;
+  }
+
+  if (!persona_id) {
+    redirect(
+      `/donaciones/nueva?error=${encodeURIComponent('Selecciona un congregante o escribe un nombre nuevo.')}`
+    );
+  }
+
   const monto = Number(formData.get('monto'));
   const moneda = ((formData.get('moneda') as string) || 'EUR').trim();
   const fecha = formData.get('fecha') as string;
@@ -20,7 +49,6 @@ export async function crearDonacion(formData: FormData) {
   const institucion_id = campoTexto(formData, 'institucion_id');
   const es_matenat_yado = formData.get('es_matenat_yado') === 'on';
 
-  const supabase = await crearClienteServidor();
   const { error } = await supabase.from('donaciones').insert({
     persona_id,
     cobro_id,
@@ -39,6 +67,7 @@ export async function crearDonacion(formData: FormData) {
   }
 
   revalidatePath('/donaciones');
+  revalidatePath('/personas');
   redirect('/donaciones');
 }
 

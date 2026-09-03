@@ -4,7 +4,6 @@ import {
   IconDashboard,
   IconPersonas,
   IconDonaciones,
-  IconCobros,
   IconInstituciones,
   IconUsuarios,
 } from './icons';
@@ -25,7 +24,6 @@ export function Sidebar({ rol, pathname }: { rol: RolUsuario | null; pathname: s
     enlaces.push(
       { href: '/personas', etiqueta: 'Congregantes', icono: IconPersonas },
       { href: '/donaciones', etiqueta: 'Donaciones', icono: IconDonaciones },
-      { href: '/cobros', etiqueta: 'Cobros', icono: IconCobros },
       { href: '/instituciones', etiqueta: 'Instituciones', icono: IconInstituciones }
     );
   }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/server';
 import { crearDonacion } from '../actions';
 import { CampoImporteConMatenatYado } from '@/components/campo-importe-matenat-yado';
+import { SelectorPersona } from '@/components/selector-persona';
 
 export default async function PaginaNuevaDonacion({
   searchParams,
@@ -17,17 +18,13 @@ export default async function PaginaNuevaDonacion({
     .eq('activo', true)
     .order('apellidos', { ascending: true });
 
-  const { data: cobros } = await supabase
-    .from('cobros')
-    .select('id, nombre')
-    .eq('activo', true)
-    .order('nombre', { ascending: true });
-
   const { data: instituciones } = await supabase
     .from('instituciones')
     .select('id, nombre')
     .eq('activo', true)
     .order('nombre', { ascending: true });
+
+  const institucionPorDefecto = instituciones?.find((i) => i.nombre === 'Torat Moshe');
 
   const hoy = new Date().toISOString().slice(0, 10);
 
@@ -43,24 +40,7 @@ export default async function PaginaNuevaDonacion({
       )}
 
       <form action={crearDonacion} className="max-w-lg space-y-4">
-        <div>
-          <label className="block text-sm text-gray-700">Persona *</label>
-          <select
-            name="persona_id"
-            required
-            defaultValue={persona ?? ''}
-            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-          >
-            <option value="" disabled>
-              Selecciona…
-            </option>
-            {personas?.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nombre} {p.apellidos}
-              </option>
-            ))}
-          </select>
-        </div>
+        <SelectorPersona personas={personas ?? []} personaInicial={persona} />
 
         <CampoImporteConMatenatYado />
 
@@ -84,37 +64,20 @@ export default async function PaginaNuevaDonacion({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm text-gray-700">Cobro / Campaña</label>
-            <select
-              name="cobro_id"
-              defaultValue=""
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            >
-              <option value="">— Ninguno —</option>
-              {cobros?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700">Institución</label>
-            <select
-              name="institucion_id"
-              defaultValue=""
-              className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
-            >
-              <option value="">— Ninguna —</option>
-              {instituciones?.map((i) => (
-                <option key={i.id} value={i.id}>
-                  {i.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <label className="block text-sm text-gray-700">Institución</label>
+          <select
+            name="institucion_id"
+            defaultValue={institucionPorDefecto?.id ?? ''}
+            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2 text-sm"
+          >
+            <option value="">— Ninguna —</option>
+            {instituciones?.map((i) => (
+              <option key={i.id} value={i.id}>
+                {i.nombre}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
