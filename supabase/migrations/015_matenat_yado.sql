@@ -5,7 +5,11 @@ alter table public.donaciones
 
 -- Se reemplaza la función para permitir opcionalmente actualizar el
 -- importe en el mismo paso de marcar como pagada (p_monto = null deja
--- el importe como estaba).
+-- el importe como estaba). p_metodo_pago llega como texto desde la
+-- aplicación y se convierte al tipo enum metodo_pago de la columna.
+drop function if exists public.marcar_donacion_pagada(uuid, text);
+drop function if exists public.marcar_donacion_pagada(uuid, text, numeric);
+
 create or replace function public.marcar_donacion_pagada(
   p_donacion_id uuid,
   p_metodo_pago text,
@@ -26,7 +30,7 @@ begin
 
   update public.donaciones
   set estado = 'pagado',
-      metodo_pago = p_metodo_pago,
+      metodo_pago = p_metodo_pago::metodo_pago,
       monto = coalesce(p_monto, monto),
       updated_by = auth.uid(),
       updated_at = now()
@@ -39,9 +43,3 @@ end;
 $$;
 
 grant execute on function public.marcar_donacion_pagada(uuid, text, numeric) to authenticated;
-
--- Postgres no permite cambiar solo la firma "in place" si ya existe una
--- versión distinta con el mismo nombre y distinta cantidad de
--- parámetros por defecto; nos aseguramos de que no quede la versión
--- vieja de 2 parámetros huérfana.
-drop function if exists public.marcar_donacion_pagada(uuid, text);
