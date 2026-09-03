@@ -74,7 +74,9 @@ export default async function PaginaPersonas({
             {personas?.map((persona) => (
               <tr key={persona.id}>
                 <td className="px-4 py-2">
-                  {persona.nombre} {persona.apellidos}
+                  <Link href={`/personas/${persona.id}`} className="text-torat-moshe-navy hover:underline">
+                    {persona.nombre} {persona.apellidos}
+                  </Link>
                 </td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{persona.email ?? '—'}</td>
                 <td className="px-4 py-2 text-torat-moshe-gray">{persona.telefono ?? '—'}</td>
@@ -91,7 +93,7 @@ export default async function PaginaPersonas({
                 </td>
                 <td className="px-4 py-2 text-right">
                   <Link
-                    href={`/personas/${persona.id}`}
+                    href={`/personas/${persona.id}/editar`}
                     className="mr-3 text-torat-moshe-navy hover:underline"
                   >
                     Editar
