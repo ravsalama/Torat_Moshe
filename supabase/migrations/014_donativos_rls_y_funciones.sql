@@ -12,6 +12,7 @@
 -- ============================================================
 alter table public.instituciones enable row level security;
 
+drop policy if exists "instituciones_select_staff" on public.instituciones;
 create policy "instituciones_select_staff" on public.instituciones
   for select
   using (
@@ -21,6 +22,7 @@ create policy "instituciones_select_staff" on public.instituciones
     )
   );
 
+drop policy if exists "instituciones_insert_staff" on public.instituciones;
 create policy "instituciones_insert_staff" on public.instituciones
   for insert
   with check (
@@ -30,6 +32,7 @@ create policy "instituciones_insert_staff" on public.instituciones
     )
   );
 
+drop policy if exists "instituciones_update_staff" on public.instituciones;
 create policy "instituciones_update_staff" on public.instituciones
   for update
   using (
@@ -44,6 +47,7 @@ create policy "instituciones_update_staff" on public.instituciones
 -- ============================================================
 alter table public.cobros enable row level security;
 
+drop policy if exists "cobros_select_staff" on public.cobros;
 create policy "cobros_select_staff" on public.cobros
   for select
   using (
@@ -53,6 +57,7 @@ create policy "cobros_select_staff" on public.cobros
     )
   );
 
+drop policy if exists "cobros_insert_staff" on public.cobros;
 create policy "cobros_insert_staff" on public.cobros
   for insert
   with check (
@@ -62,6 +67,7 @@ create policy "cobros_insert_staff" on public.cobros
     )
   );
 
+drop policy if exists "cobros_update_staff" on public.cobros;
 create policy "cobros_update_staff" on public.cobros
   for update
   using (
@@ -76,6 +82,7 @@ create policy "cobros_update_staff" on public.cobros
 -- ============================================================
 alter table public.donaciones enable row level security;
 
+drop policy if exists "donaciones_select_staff" on public.donaciones;
 create policy "donaciones_select_staff" on public.donaciones
   for select
   using (
@@ -85,6 +92,7 @@ create policy "donaciones_select_staff" on public.donaciones
     )
   );
 
+drop policy if exists "donaciones_insert_staff" on public.donaciones;
 create policy "donaciones_insert_staff" on public.donaciones
   for insert
   with check (
@@ -96,6 +104,7 @@ create policy "donaciones_insert_staff" on public.donaciones
 
 -- A propósito, SOLO super_admin puede hacer UPDATE/DELETE directo.
 -- gestor tiene que pasar por las funciones de abajo.
+drop policy if exists "donaciones_update_super_admin" on public.donaciones;
 create policy "donaciones_update_super_admin" on public.donaciones
   for update
   using (
@@ -105,6 +114,7 @@ create policy "donaciones_update_super_admin" on public.donaciones
     )
   );
 
+drop policy if exists "donaciones_delete_super_admin" on public.donaciones;
 create policy "donaciones_delete_super_admin" on public.donaciones
   for delete
   using (
