@@ -2,7 +2,7 @@ import { HDate, HebrewCalendar, Sedra, gematriya, months } from '@hebcal/core';
 
 /**
  * Configuración de diáspora/Israel para todos los cálculos de @hebcal/core.
- * Sinagoga Rambam está en Madrid -> false (diáspora).
+ * Sinagoga Torat Moshe está en Madrid -> false (diáspora).
  * Debe coincidir con configuracion.hebcal_israel en la base de datos.
  */
 export const IL = process.env.NEXT_PUBLIC_HEBCAL_ISRAEL === 'true';

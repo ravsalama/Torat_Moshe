@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --color-rambam-navy: #28598F;
-  --color-rambam-gray: #A7ACAE;
+  --color-torat-moshe-navy: #28598F;
+  --color-torat-moshe-gray: #A7ACAE;
 }
 
 body {

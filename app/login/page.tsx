@@ -28,9 +28,9 @@ export default async function PaginaLogin({
     <main className="flex min-h-screen items-center justify-center bg-white">
       <form
         action={iniciarSesion}
-        className="w-full max-w-sm space-y-4 rounded-lg border border-rambam-gray/30 p-8"
+        className="w-full max-w-sm space-y-4 rounded-lg border border-torat-moshe-gray/30 p-8"
       >
-        <h1 className="text-xl font-semibold text-rambam-navy">Sinagoga Rambam</h1>
+        <h1 className="text-xl font-semibold text-torat-moshe-navy">Sinagoga Torat Moshe</h1>
 
         {error && (
           <p className="rounded bg-red-50 p-2 text-sm text-red-700">{error}</p>
@@ -45,7 +45,7 @@ export default async function PaginaLogin({
             name="email"
             type="email"
             required
-            className="mt-1 w-full rounded border border-rambam-gray/40 p-2"
+            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2"
           />
         </div>
 
@@ -58,13 +58,13 @@ export default async function PaginaLogin({
             name="password"
             type="password"
             required
-            className="mt-1 w-full rounded border border-rambam-gray/40 p-2"
+            className="mt-1 w-full rounded border border-torat-moshe-gray/40 p-2"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full rounded bg-rambam-navy p-2 text-white hover:bg-rambam-navy-dark"
+          className="w-full rounded bg-torat-moshe-navy p-2 text-white hover:bg-torat-moshe-navy-dark"
         >
           Entrar
         </button>

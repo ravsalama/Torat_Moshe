@@ -1,4 +1,4 @@
-# Sinagoga Rambam — Sistema de gestión de donativos
+# Sinagoga Torat Moshe — Sistema de gestión de donativos
 
 Next.js (App Router) + Supabase (Postgres, Auth, RLS, Vault) + `@hebcal/core`.
 
