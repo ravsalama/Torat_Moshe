@@ -7,6 +7,7 @@ import {
   IconDonaciones,
   IconInstituciones,
   IconUsuarios,
+  IconReloj,
 } from './icons';
 
 type Enlace = {
@@ -30,7 +31,10 @@ export function Sidebar({ rol, pathname }: { rol: RolUsuario | null; pathname: s
   }
 
   if (esSuperAdmin) {
-    enlaces.push({ href: '/usuarios', etiqueta: 'Usuarios', icono: IconUsuarios });
+    enlaces.push(
+      { href: '/usuarios', etiqueta: 'Usuarios', icono: IconUsuarios },
+      { href: '/auditoria', etiqueta: 'Auditoría', icono: IconReloj }
+    );
   }
 
   return (

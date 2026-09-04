@@ -8,6 +8,7 @@ import {
   IconDonaciones,
   IconInstituciones,
   IconUsuarios,
+  IconReloj,
 } from './icons';
 
 function construirEnlaces(rol: RolUsuario | null) {
@@ -25,7 +26,10 @@ function construirEnlaces(rol: RolUsuario | null) {
   }
 
   if (esSuperAdmin) {
-    enlaces.push({ href: '/usuarios', etiqueta: 'Usuarios', icono: IconUsuarios });
+    enlaces.push(
+      { href: '/usuarios', etiqueta: 'Usuarios', icono: IconUsuarios },
+      { href: '/auditoria', etiqueta: 'Auditoría', icono: IconReloj }
+    );
   }
 
   return enlaces;
